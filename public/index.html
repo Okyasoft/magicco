@@ -82,9 +82,11 @@
 
     <paper-dialog heading="Choose your photo">
       <p>Upload an image file (.png or .jpg) and cartoonize ...</p>
-      <file-input class="btn btn-primary" extensions='["jpg", "png"]' minSize="500000" maxSize="3000000">
+      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">
         <paper-button raised>Select</paper-button>
       </file-input>
+      <br />
+      <div id="filemsg">No files selected</div>
     <paper-dialog>
 
 
@@ -108,7 +110,17 @@
     tabs.selected = "all";
   });
 
-  var fileinput = document.querySelector('file-input');
+  var fileEl = document.getElementById("filepick");
+  fileEl.addEventListener('change', function(event) {
+    var validfile = event.detail.valid;
+    if(validfile==null) {
+      document.getElementById("filemsg").innerHTML = 'Invalid File';
+    }
+    else {
+      document.getElementById("filemsg").innerHTML = 'Uploading File';
+    }
+    //console.log(validfile);
+  });
 
   </script>
 </body>
