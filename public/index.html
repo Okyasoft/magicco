@@ -84,7 +84,7 @@
     <paper-dialog horizontal center-justified layout>
       <p>Upload an image file (.png or .jpg) and cartoonize</p>
       <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">  
-        <div id="filemsg">No file selected</div> 
+        <div></div> 
         <br />
         <paper-button raised>Select</paper-button>
       </file-input>
@@ -104,12 +104,13 @@
       if (error) {
         //console.log("Login Failed!", error);
         pd.opened = true;
-        pd.heading = "Authentication Failed !";
+        pd.heading = "Authentication Failed!";
         pd.innerHTML = "";
       } else {
         //console.log("Authenticated successfully with payload:", authData);
         pd.opened = true;
         pd.heading = "Welcome " +authData.facebook.displayName + " ...";
+        pd.querySelector("div").innerText = "No file selected";
       }
     });
     }
@@ -125,12 +126,12 @@
   var fileEl = document.getElementById("filepick");
   fileEl.addEventListener('change', function(event) {
     var validfile = event.detail.valid;
-    console.log(event);
+    //console.log(event);
     if(validfile.length) {
-      event.path[0].innerHTML = '<p>Uploading File ...</p>';
+      event.path[0].querySelector('div').innerText = "Uploading File ...";
     }
     else {
-      event.path[0].innerHTML = '<p>Invalid File</p><paper-button raised>Select</paper-button>';
+      event.path[0].querySelector('div').innerText = "Invalid File!";
     }
     //console.log(validfile);
   });
