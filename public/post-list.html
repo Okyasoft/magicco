@@ -22,9 +22,9 @@
           favorite="{{post.favorite}}"
           on-favorite-tap="{{handleFavorite}}"
           hidden?="{{show == 'favorites' && !post.favorite}}">
-          <img src="{{post.avatar}}" width="70" height="70">
+          <img src="{{post.avatar}}" class='avatar' width="64" height="64">
           <h2>{{post.username}}</h2>
-          <p>{{post.text}}</p>
+          <img src="{{post.image}}" class='main' width="400" height="300">
         </post-card>
       </template>
     </div>
@@ -37,5 +37,6 @@
       this.$.service.setFavorite(post.uid, post.favorite);
     }
   });
+
   </script>
 </polymer-element>

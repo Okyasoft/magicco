@@ -56,7 +56,7 @@
     </style>
     <core-ajax id="ajax"
       auto
-      url="../api/posts.json"
+      url="https://magicco.firebaseio.com/posts.json"
       on-core-response="{{postsLoaded}}"
       handleAs="json">
     </core-ajax>
@@ -68,7 +68,14 @@
     },
     postsLoaded: function() {
       // Make a copy of the loaded data
-      this.posts = this.$.ajax.response.slice(0);
+      var a = [];
+      allposts = (this.$.ajax.response);
+      keys = Object.keys(allposts);
+      keys.forEach(function(e){
+        a.push(allposts[e]);
+      });
+      this.posts = a.reverse();
+      //this.posts = this.$.ajax.response.slice(0);
     },
     /** 
      * Update the service with the current favorite value.

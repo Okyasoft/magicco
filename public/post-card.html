@@ -19,10 +19,10 @@
     polyfill-next-selector { content: '.card-header h2'; }
     .card-header ::content h2 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 1.2rem;
       font-weight: 300;
     }
-    polyfill-next-selector { content: '.card-header img'; }
+    polyfill-next-selector { content: '.card-header img avatar'; }
     .card-header ::content img {
       width: 70px;
       border-radius: 50%;
@@ -41,8 +41,9 @@
 
     <div class="card-header" layout horizontal center>
 
-      <content select="img"></content>
+      <content select="img avatar"></content>
       <content select="h2"></content>
+      <content select="img main"></content>
 
     </div>
 

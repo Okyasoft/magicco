@@ -9,6 +9,7 @@
 
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   <script src="bower_components/firebase/firebase.js"></script>
+  <script src="js/faces.js"></script>
 
   <link rel="import" href="bower_components/font-roboto/roboto.html">
   <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
@@ -83,7 +84,7 @@
 
     <paper-dialog horizontal center-justified layout>
       <p>Upload an image file (.png or .jpg) and cartoonize</p>
-      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">  
+      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="2">  
         <div></div> 
         <br />
         <paper-button raised>Select</paper-button>
@@ -96,6 +97,7 @@
   var tabs = document.querySelector('paper-tabs');
   var list = document.querySelector('post-list');
   var pd = document.querySelector('paper-dialog');
+  var authInfo;
 
   tabs.addEventListener('core-select', function() {
     if(tabs.selected === "upload") {
@@ -111,6 +113,7 @@
         pd.opened = true;
         pd.heading = "Welcome " +authData.facebook.displayName + " ...";
         pd.querySelector("div").innerText = "No file selected";
+        authInfo = authData;
       }
     });
     }
@@ -129,6 +132,36 @@
     //console.log(event);
     if(validfile.length) {
       event.path[0].querySelector('div').innerText = "Uploading File ...";
+      var ref = new Firebase("https://magicco.firebaseio.com/posts");
+      var face = faces.generate();
+      var svg = faces.getSVG(face);
+      var serializer = new XMLSerializer();
+      var source = serializer.serializeToString(svg);
+      if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+          source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+      }
+      if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+          source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+      }
+      source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+      var avatardata = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+      var reader = new FileReader();
+      reader.onload = (function (thefile) {
+        return function(e) {
+          var filePayload = e.target.result;
+          ref.push({'uid' : authInfo.uid, 'username' : authInfo.facebook.displayName, 'image' :filePayload, 'avatar':avatardata,
+                    'favorite': false}, function(e) {
+            if(e) {
+              console.log(e);
+            }
+            else{
+              location.reload();
+            } 
+          });
+        }
+
+      }) (validfile[0]);
+      reader.readAsDataURL(validfile[0]);
     }
     else {
       event.path[0].querySelector('div').innerText = "Invalid File!";
@@ -140,9 +173,9 @@
     var ref = new Firebase("https://magicco.firebaseio.com");
     ref.authWithOAuthPopup("facebook", function(error, authData) {
     if (error) {
-      console.log("Login Failed!", error);
+      //console.log("Login Failed!", error);
     } else {
-      console.log("Authenticated successfully with payload:", authData);
+      //console.log("Authenticated successfully with payload:", authData);
     }
   });
 
