@@ -1,108 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+
   <title>Magicco</title>
 
-  <style>
-    body{
-      font:500 14px/21px 'Helvetica Neue', Helvetica, Arials;
-      padding:40px;
-    }
-  </style>
-  
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
 
-  <link rel="import" href="bower_components/core-scroll-header-panel/core-scroll-header-panel.html">
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
   <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
-  <link rel="import" href="bower_components/core-icon-button/core-icon-button.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tab.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-action-dialog.html">
+  <link rel="import" href="bower_components/file-input/file-input.html">
 
-    <style shim-shadowdom>
+  <link rel="import" href="post-list.html">
 
-    html, body {
-      height: 100%;
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft', sans-serif;
+  }
+  core-header-panel {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
+  core-toolbar {
+    background: #03a9f4;
+    color: white;
+  }
+  #tabs {
+    width: 100%;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  text-transform: uppercase;
+  }
+  .container {
+    width: 80%;
+    margin: 50px auto;
+  }
+  @media (min-width: 481px) {
+    #tabs {
+      width: 200px;
     }
-
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      color: #333;
+    .container {
+      width: 400px;
     }
-
-    core-scroll-header-panel {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: #eee;
-    }
-
-    /* background for toolbar when it is at its full size */
-    core-scroll-header-panel::shadow #headerBg {
-      background-image: url(bower_components/core-scroll-header-panel/demos/images/bg9.jpg);
-    }
-
-    /* background for toolbar when it is condensed */
-    core-scroll-header-panel::shadow #condensedHeaderBg {
-      background-color: #f4b400;
-    }
-
-    core-toolbar {
-      color: #f1f1f1;
-      fill: #f1f1f1;
-      background-color: transparent;
-    }
-
-    .title {
-      -webkit-transform-origin: 0;
-      transform-origin: 0;
-      font-size: 40px;
-    }
-
-    .content {
-      padding: 8px;
-    }
-
+  }
   </style>
 
 </head>
+
 <body unresolved>
 
-  <core-scroll-header-panel condenses>
+  <core-header-panel>
 
-    <core-toolbar class="tall">
-
-      <core-icon-button icon="arrow-back"></core-icon-button>
-      <div flex></div>
-      <core-icon-button icon="search"></core-icon-button>
-      <core-icon-button icon="more-vert"></core-icon-button>
-      <div class="bottom indent title">Title</div>
-
+    <core-toolbar>
+      <paper-tabs id="tabs" selected="all" self-end>
+        <paper-tab name="all">Magiccos</paper-tab>
+        <paper-tab name="upload">Upload</paper-tab>
+      </paper-tabs>
     </core-toolbar>
 
-    <div class="content">
-
-    Test
-
+    <div class="container" layout vertical center>
+      <post-list show="all"></post-list>
     </div>
 
-  </core-scroll-header-panel>
+    <paper-dialog heading="Choose your image">
+      <p>Select your file (.png or .jpg) to upload and cartoonize ...</p>
+      <file-input class="btn btn-primary" extensions='["jpg", "png"]' minSize="500000" maxSize="3000000">
+        <paper-button raised>Select</paper-button>
+      </file-input>
+    <paper-dialog>
+
+
+  </core-header-panel>
 
   <script>
+  var tabs = document.querySelector('paper-tabs');
+  var list = document.querySelector('post-list');
+  var pd = document.querySelector('paper-dialog');
 
-    // custom transformation: scale header's title
-    var titleStyle = document.querySelector('.title').style;
-    addEventListener('core-header-transform', function(e) {
-      var d = e.detail;
-      var m = d.height - d.condensedHeight;
-      var scale = Math.max(0.75, (m - d.y) / (m / 0.25)  + 0.75);
-      titleStyle.transform = titleStyle.webkitTransform =
-          'scale(' + scale + ') translateZ(0)';
-    });
+  tabs.addEventListener('core-select', function() {
+    if(tabs.selected === "upload") {
+      pd.opened = true;
+    }
+    else {
+      list.show = tabs.selected;
+    }
+  });
 
+  pd.addEventListener('core-overlay-open', function() {
+    tabs.selected = "all";
+  });
+
+  var fileinput = document.querySelector('file-input');
+  
   </script>
+</body>
 
 </html>

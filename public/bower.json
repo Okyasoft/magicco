@@ -15,6 +15,12 @@
   ],
   "dependencies": {
     "core-scroll-header-panel": "Polymer/core-scroll-header-panel#~0.5.4",
-    "polymer": "Polymer/polymer#~0.5.4"
+    "polymer": "Polymer/polymer#~0.5.4",
+    "core-ajax": "Polymer/core-ajax#~0.5.4",
+    "paper-tabs": "Polymer/paper-tabs#~0.5.4",
+    "paper-dialog": "Polymer/paper-dialog#~0.5.4",
+    "file-input": "~1.1.4",
+    "paper-button": "Polymer/paper-button#~0.5.4",
+    "core-header-panel": "Polymer/core-header-panel#~0.5.4"
   }
 }
