@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+  <script src="bower_components/firebase/firebase.js"></script>
 
   <link rel="import" href="bower_components/font-roboto/roboto.html">
   <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
@@ -80,15 +81,14 @@
       <post-list show="all"></post-list>
     </div>
 
-    <paper-dialog heading="Choose your photo">
-      <p>Upload an image file (.png or .jpg) and cartoonize ...</p>
-      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">
+    <paper-dialog horizontal center-justified layout>
+      <p>Upload an image file (.png or .jpg) and cartoonize</p>
+      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">  
+        <div id="filemsg">No file selected</div> 
+        <br />
         <paper-button raised>Select</paper-button>
       </file-input>
-      <br />
-      <div id="filemsg">No files selected</div>
     <paper-dialog>
-
 
   </core-header-panel>
 
@@ -99,7 +99,19 @@
 
   tabs.addEventListener('core-select', function() {
     if(tabs.selected === "upload") {
-      pd.opened = true;
+    var ref = new Firebase("https://magicco.firebaseio.com");
+    ref.authWithOAuthPopup("facebook", function(error, authData) {
+      if (error) {
+        //console.log("Login Failed!", error);
+        pd.opened = true;
+        pd.heading = "Authentication Failed !";
+        pd.innerHTML = "";
+      } else {
+        //console.log("Authenticated successfully with payload:", authData);
+        pd.opened = true;
+        pd.heading = "Welcome " +authData.facebook.displayName + " ...";
+      }
+    });
     }
     else {
       list.show = tabs.selected;
@@ -113,14 +125,27 @@
   var fileEl = document.getElementById("filepick");
   fileEl.addEventListener('change', function(event) {
     var validfile = event.detail.valid;
-    if(validfile==null) {
-      document.getElementById("filemsg").innerHTML = 'Invalid File';
+    console.log(event);
+    if(validfile.length) {
+      event.path[0].innerHTML = '<p>Uploading File ...</p>';
     }
     else {
-      document.getElementById("filemsg").innerHTML = 'Uploading File';
+      event.path[0].innerHTML = '<p>Invalid File</p><paper-button raised>Select</paper-button>';
     }
     //console.log(validfile);
   });
+
+  function loginfb() {
+    var ref = new Firebase("https://magicco.firebaseio.com");
+    ref.authWithOAuthPopup("facebook", function(error, authData) {
+    if (error) {
+      console.log("Login Failed!", error);
+    } else {
+      console.log("Authenticated successfully with payload:", authData);
+    }
+  });
+
+  } 
 
   </script>
 </body>
