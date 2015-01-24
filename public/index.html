@@ -58,6 +58,9 @@
       width: 400px;
     }
   }
+  html /deep/ paper-dialog {
+    color: green;
+  }
   </style>
 
 </head>
@@ -77,8 +80,8 @@
       <post-list show="all"></post-list>
     </div>
 
-    <paper-dialog heading="Choose your image">
-      <p>Select your file (.png or .jpg) to upload and cartoonize ...</p>
+    <paper-dialog heading="Choose your photo">
+      <p>Upload an image file (.png or .jpg) and cartoonize ...</p>
       <file-input class="btn btn-primary" extensions='["jpg", "png"]' minSize="500000" maxSize="3000000">
         <paper-button raised>Select</paper-button>
       </file-input>
@@ -106,7 +109,7 @@
   });
 
   var fileinput = document.querySelector('file-input');
-  
+
   </script>
 </body>
 
