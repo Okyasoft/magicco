@@ -73,7 +73,7 @@
       keys = Object.keys(allposts);
       keys.forEach(function(e){
         var o = allposts[e];
-        o['url'] = window.location.href+"/posts?id="+e;
+        o['url'] = window.location.href+"posts?id="+e;
         a.push(o);
       });
       this.posts = a.reverse();

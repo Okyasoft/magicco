@@ -24,9 +24,10 @@
           hidden?="{{show == 'favorites' && !post.favorite}}">
           <img src="{{post.avatar}}" class='avatar' width="64" height="64">
           <h2>{{post.username}}</h2>
-          <img src="{{post.image}}" class='main' width="400" height="300">
-          <div class="fb-like" data-href="{{post.url}}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+          <img src="{{post.image}}" class='main' width="512" height="350">
+          <a href="{{post.url}}">comments</a>
         </post-card>
+        <div class="fb-like" data-href="{{post.url}}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
       </template>
     </div>
   </template>

@@ -61,7 +61,7 @@
       width: 200px;
     }
     .container {
-      width: 400px;
+      width: 512px;
     }
   }
   html /deep/ paper-dialog {
@@ -89,7 +89,7 @@
       $(".container").append("<post-card favorite="+data['favorite']
         + "><img src="+ data['avatar'] +" class='avatar' width='64' height='64'>"+
         "<h2>"+data['username']+"</h2>"
-        + "<img src=" +data['image'] + " class='main' width='400' height='300'>"
+        + "<img src=" +data['image'] + " class='main' width='512' height='350'>"
         +"</post-card>");
     });
     $(".fb-comments").attr('data-href',window.location.href);    
