@@ -92,12 +92,21 @@
         + "<img src=" +data['image'] + " class='main' width='400' height='300'>"
         +"</post-card>");
     });
+    $(".fb-comments").attr('data-href',window.location.href);    
   }
   </script>
 
 </head>
 
 <body unresolved onload="getpost()">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=628811530598264&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
   <core-header-panel>
 
@@ -110,7 +119,9 @@
 
     <div class="container" layout vertical center>
     </div>
-
+    <div class="fb-comments" data-numposts="4" data-colorscheme="light"
+    layout vertical center>
+    </div>
   </core-header-panel>
 
   <script>
