@@ -10,6 +10,9 @@
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   <script src="bower_components/firebase/firebase.js"></script>
   <script src="js/faces.js"></script>
+  <script src="js/pixastic.js"></script>
+  <script src="js/pixastic.effects.js"></script>
+  <script src="js/pixastic.worker.js"></script>
 
   <link rel="import" href="bower_components/font-roboto/roboto.html">
   <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
@@ -83,8 +86,8 @@
     </div>
 
     <paper-dialog horizontal center-justified layout>
-      <p>Upload an image file (.png or .jpg) and cartoonize</p>
-      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="2">  
+      <p>Upload an image (png or jpeg) file (&lt 1 MB) to cartoonize</p>
+      <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">  
         <div></div> 
         <br />
         <paper-button raised>Select</paper-button>
@@ -107,7 +110,7 @@
         //console.log("Login Failed!", error);
         pd.opened = true;
         pd.heading = "Authentication Failed!";
-        pd.innerHTML = "";
+        //pd.innerHTML = "";
       } else {
         //console.log("Authenticated successfully with payload:", authData);
         pd.opened = true;
@@ -131,7 +134,7 @@
     var validfile = event.detail.valid;
     //console.log(event);
     if(validfile.length) {
-      event.path[0].querySelector('div').innerText = "Uploading File ...";
+      event.path[0].querySelector('div').innerText = "Uploading and applying filters please wait ...";
       var ref = new Firebase("https://magicco.firebaseio.com/posts");
       var face = faces.generate();
       var svg = faces.getSVG(face);
@@ -149,14 +152,32 @@
       reader.onload = (function (thefile) {
         return function(e) {
           var filePayload = e.target.result;
-          ref.push({'uid' : authInfo.uid, 'username' : authInfo.facebook.displayName, 'image' :filePayload, 'avatar':avatardata,
-                    'favorite': false}, function(e) {
-            if(e) {
-              console.log(e);
-            }
-            else{
-              location.reload();
-            } 
+          var canvas = document.createElement('canvas');
+          var img = document.createElement('img');
+          img.src = filePayload; 
+          canvas.width = img.width;
+          canvas.height = img.height;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img,0,0);
+          var P = new Pixastic(ctx,'js/');
+          var optglow = {kernelSize:4,amount:0.2};
+          var optblur = {kernelSize:4};
+          var optpost = {levels:5};
+          P["glow"](optglow).done(function (){
+            P["blur"](optblur).done(function (){
+              P["posterize"](optpost).done(function (){
+                filePayload = canvas.toDataURL();
+                ref.push({'uid' : authInfo.uid, 'username' : authInfo.facebook.displayName, 'image' :filePayload, 'avatar':avatardata,
+                          'favorite': false}, function(e) {
+                  if(e) {
+                    console.log(e);
+                  }
+                  else{
+                    location.reload();
+                  } 
+                });
+              });
+            });
           });
         }
 

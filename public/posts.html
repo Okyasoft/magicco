@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>Magicco</title>
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+  <script src="bower_components/firebase/firebase.js"></script>
+  <script src="js/faces.js"></script>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tab.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-action-dialog.html">
+  <link rel="import" href="bower_components/file-input/file-input.html">
+  <link rel="import" href="bower_components/polymer/polymer.html">
+  <link rel="import" href="post-service/post-service.html">
+  <link rel="import" href="post-card.html">
+
+  <link rel="import" href="post-list.html">
+
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft', sans-serif;
+  }
+  core-header-panel {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
+  core-toolbar {
+    background: #03a9f4;
+    color: white;
+  }
+  #tabs {
+    width: 100%;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  text-transform: uppercase;
+  }
+  .container {
+    width: 80%;
+    margin: 50px auto;
+  }
+  @media (min-width: 481px) {
+    #tabs {
+      width: 200px;
+    }
+    .container {
+      width: 400px;
+    }
+  }
+  html /deep/ paper-dialog {
+    color: green;
+  }
+  </style>
+
+  <script>
+  function getQueryVariable(variable)
+  {
+     var query = window.location.search.substring(1);
+     var vars = query.split("&");
+     for (var i=0;i<vars.length;i++) {
+             var pair = vars[i].split("=");
+             if(pair[0] == variable){return pair[1];}
+     }
+     return(false);
+  }
+
+  function getpost(){
+    var id = getQueryVariable('id');
+    id+='.json';
+    $.getJSON("https://magicco.firebaseio.com/posts/"+id,function(data) {
+      //console.log(data);
+      $(".container").append("<post-card favorite="+data['favorite']
+        + "><img src="+ data['avatar'] +" class='avatar' width='64' height='64'>"+
+        "<h2>"+data['username']+"</h2>"
+        + "<img src=" +data['image'] + " class='main' width='400' height='300'>"
+        +"</post-card>");
+    });
+  }
+  </script>
+
+</head>
+
+<body unresolved onload="getpost()">
+
+  <core-header-panel>
+
+    <core-toolbar>
+      <paper-tabs id="tabs" selected="all" self-end>
+        <paper-tab name="all">Magiccos</paper-tab>
+        <paper-tab name="back">Back</paper-tab>
+      </paper-tabs>
+    </core-toolbar>
+
+    <div class="container" layout vertical center>
+    </div>
+
+  </core-header-panel>
+
+  <script>
+  var tabs = document.querySelector('paper-tabs');
+  tabs.addEventListener('core-select', function() {
+    if(tabs.selected === "back") {
+      window.location.href="/";
+    }
+  });
+  </script>
+</body>
+
+</html>
