@@ -110,8 +110,8 @@
       if (error) {
         //console.log("Login Failed!", error);
         pd.opened = true;
-        pd.heading = "Authentication Failed!";
-        //pd.innerHTML = "";
+        pd.heading = "Authentication failed!";
+        pd.innerText = "Refresh and try again ...";
       } else {
         //console.log("Authenticated successfully with payload:", authData);
         pd.opened = true;
