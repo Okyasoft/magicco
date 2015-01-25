@@ -13,6 +13,7 @@
   <script src="js/pixastic.js"></script>
   <script src="js/pixastic.effects.js"></script>
   <script src="js/pixastic.worker.js"></script>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 
   <link rel="import" href="bower_components/font-roboto/roboto.html">
   <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
@@ -67,18 +68,9 @@
     color: green;
   }
   </style>
-
 </head>
 
 <body unresolved>
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=628811530598264&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
   <core-header-panel>
 
@@ -92,7 +84,6 @@
     <div class="container" layout vertical center>
       <post-list show="all"></post-list>
     </div>
-
     <paper-dialog horizontal center-justified layout>
       <p>Upload an image (png or jpeg) file (&lt 1 MB) to cartoonize</p>
       <file-input id="filepick" class="btn btn-primary" extensions='["jpeg", "jpg", "png"]' minSize="1" maxSize="1000000" maxFiles="1">  
@@ -208,7 +199,23 @@
     }
   });
 
-  } 
+  }
+/*
+  function getpost(){
+    var listofposts = document.querySelector('post-list::shadow .maincontent').querySelectorAll('post-card');
+    console.log(listofposts.length);
+    for(var i=0;i<listofposts.length;i++){
+      e=listofposts[i];
+      var a = e.querySelector('.link');
+      var div = e.querySelector('.fb-like');
+      div.setAttribute('data-href',a.href);
+    };
+  }
+
+  window.addEventListener('polymer-ready', function(e){
+    getpost();
+  });
+*/
 
   </script>
 </body>

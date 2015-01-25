@@ -16,7 +16,7 @@
 
     <post-service id="service" posts="{{posts}}"></post-service>
     
-    <div layout vertical center>
+    <div class="maincontent" layout vertical center>
       <template repeat="{{post in posts}}">
         <post-card
           favorite="{{post.favorite}}"
@@ -25,9 +25,8 @@
           <img src="{{post.avatar}}" class='avatar' width="64" height="64">
           <h2>{{post.username}}</h2>
           <img src="{{post.image}}" class='main' width="512" height="350">
-          <a href="{{post.url}}">comments</a>
+          <a href="{{post.url}}" class='link'>More</a>
         </post-card>
-        <div class="fb-like" data-href="{{post.url}}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
       </template>
     </div>
   </template>
