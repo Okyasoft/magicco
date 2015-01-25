@@ -113,7 +113,7 @@
       } else {
         //console.log("Authenticated successfully with payload:", authData);
         pd.opened = true;
-        pd.heading = "Welcome " +authData.facebook.displayName + " ...";
+        pd.heading = "Welcome " +authData.facebook.displayName;
         pd.querySelector("div").innerText = "No file selected";
         authInfo = authData;
       }
@@ -165,15 +165,34 @@
           P["glow"](optglow).done(function (){
             P["blur"](optblur).done(function (){
               P["posterize"](optpost).done(function (){
-                filePayload = canvas.toDataURL();
-                ref.push({'uid' : authInfo.uid, 'username' : authInfo.facebook.displayName, 'image' :filePayload, 'avatar':avatardata,
-                          'favorite': false}, function(e) {
-                  if(e) {
-                    console.log(e);
-                  }
-                  else{
-                    location.reload();
-                  } 
+                //filePayload = canvas.toDataURL();
+                    try {
+                        filePayload = canvas.toDataURL('image/jpeg', 0.9).split(',')[1];
+                    } catch(e) {
+                        filePayload = canvas.toDataURL().split(',')[1];
+                    }
+                    $.ajax({
+                    url: 'https://api.imgur.com/3/upload',
+                    type: 'POST',
+                    headers: {
+                        Authorization: 'Client-ID 3803de1cba04ded'
+                    },
+                    data: {
+                        image: filePayload
+                    },
+                }).success(function(data) {
+                    var url = data.data.link;
+                    ref.push({'uid' : authInfo.uid, 'username' : authInfo.facebook.displayName, 'image' :url, 'avatar':avatardata,'favorite': false}, function(e) {
+                      if(e) {
+                        console.log(e);
+                      }
+                      else{
+                        location.reload();
+                      } 
+                    });
+                    //console.log(data);
+                }).error(function() {
+                    console.log('cannot reach imgur api');
                 });
               });
             });
