@@ -6,6 +6,9 @@
   <title>Magicco</title>
 
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta property="og:title" content="Cartoonize your images with Magicco" />
+  <meta property="og:site_name" content="Magicco App"/>
+  <meta property="og:type" content="Web Application"/>
   <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   <script src="bower_components/firebase/firebase.js"></script>
   <script src="js/faces.js"></script>
@@ -91,6 +94,7 @@
         + "<img src=" +data['image'] + " class='main' width='512' height='350'>"
         +"</post-card>");
       $('head').append('<meta property="og:image" content="'+data['image']+ '">');
+      $('head').append('<meta property="og:url" content="'+window.location.href+ '">');
     });
     $(".fb-like").attr('data-href',window.location.href);  
     $(".fb-comments").attr('data-href',window.location.href);    
