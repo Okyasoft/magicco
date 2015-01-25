@@ -103,7 +103,8 @@
   var pd = document.querySelector('paper-dialog');
   var authInfo;
 
-  tabs.addEventListener('core-select', function() {
+  tabs.addEventListener('core-select', function(e) {
+    if(e.detail.isSelected) {
     if(tabs.selected === "upload") {
     var ref = new Firebase("https://magicco.firebaseio.com");
     ref.authWithOAuthPopup("facebook", function(error, authData) {
@@ -124,6 +125,7 @@
     else {
       list.show = tabs.selected;
     }
+  }
   });
 
   pd.addEventListener('core-overlay-open', function() {
