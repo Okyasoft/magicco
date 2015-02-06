@@ -56,7 +56,7 @@
     </style>
     <core-ajax id="ajax"
       auto
-      url="https://magicco.firebaseio.com/posts.json?orderBy=%22$key%22&limitToFirst=8"
+      url="https://magicco.firebaseio.com/posts.json?orderBy=%22$key%22&limitToLast=8"
       on-core-response="{{postsLoaded}}"
       handleAs="json">
     </core-ajax>
