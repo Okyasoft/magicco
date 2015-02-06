@@ -1,4 +1,4 @@
-##Magicco[ ![Codeship Status for staticshowdown/ss15-astar](https://codeship.com/projects/b534f8d0-8590-0132-383c-42544e533c3f/status?branch=master)](https://codeship.com/projects/58783)
+##Magicco[ ![Codeship Status for Okyasoft/magicco](https://codeship.com/projects/c9fdebf0-9008-0132-8958-32b8c1ae92e1/status?branch=master)](https://codeship.com/projects/61402)
 Magicco (Magic Comics) is a fun application that allows users to upload their photos and cartoonize them automatically.
 
 Features:
