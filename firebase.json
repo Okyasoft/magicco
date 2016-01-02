@@ -5,5 +5,9 @@
     "firebase.json",
     "**/.*",
     "**/node_modules/**"
-  ]
+  ],
+  "rewrites": [ {
+  "source": "posts",
+  "destination": "posts.html"
+  } ]
 }
