@@ -1,4 +1,4 @@
-##Magicco
+## Magicco
 Magicco (Magic Comics) is a fun application that allows users to upload their photos and cartoonize them automatically.
 
 Features:
