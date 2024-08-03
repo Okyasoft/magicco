@@ -3,9 +3,21 @@ var goog = goog || {};
 goog.global = this;
 goog.global.CLOSURE_UNCOMPILED_DEFINES;
 goog.global.CLOSURE_DEFINES;
+/**
+ * Checks if the provided value is defined or not.
+ * @param {Any} val - The value to be checked.
+ * @returns {Boolean} True if the input is not undefined, otherwise False.
+ */
 goog.isDef = function(val) {
   return val !== void 0;
 };
+/**
+ * This method exports a path as a nested structure of the input object on the global goog object.
+ * If the path already exists, it's overridden by the input object. If the path doesn't exist, it is created.
+ * @param {string} name - Dot-separated path that should be exported. 
+ * @param {Object} opt_object - The object that is assigned to the path.
+ * @param {Object} opt_objectToExportTo - Optional parameter, the object to add the path and object to.
+ */
 goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
   var parts = name.split(".");
   var cur = opt_objectToExportTo || goog.global;
@@ -24,6 +36,12 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
     }
   }
 };
+/**
+ * Defines a named value. The defined properties can further be used in Google Closure applications.
+ * @param {string}  name - The name of the property to be defined.
+ * @param {*} defaultValue - The default value for the property.
+ * @returns {void} No return value. The specified name is attached to the global 'goog' object with the provided default value.
+ */
 goog.define = function(name, defaultValue) {
   var value = defaultValue;
   if (!COMPILED) {
@@ -41,6 +59,13 @@ goog.DEBUG = true;
 goog.define("goog.LOCALE", "en");
 goog.define("goog.TRUSTED_SITE", true);
 goog.define("goog.STRICT_MODE_COMPATIBLE", false);
+/**
+ * Provides the given namespace ensuring the namespace is unique and dynamically creates any missing parents of the namespace. 
+ * Throws an error if the namespace is already declared.
+ * @param {string} name - The fully qualified name of the object this function will provide.
+ * @throws {Error} Will throw an error if the namespace is already declared.
+ * @returns {undefined} Does not have a return value, it is used for its side effects.
+ */
 goog.provide = function(name) {
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
@@ -57,20 +82,44 @@ goog.provide = function(name) {
   }
   goog.exportPath_(name);
 };
+/**
+ * Sets the code to function and work only during testing. It throws an error if the code is imported into the non-debug environment 
+ * and debugging is not enabled. The method accepts an optional message to provide a custom error message.
+ * @param {string}  opt_message - An optional message to provide details about the error. Default value is an empty string.
+ * @throws {Error} Throws an Error if the code is tried to be imported into non-debug environment.
+ */
 goog.setTestOnly = function(opt_message) {
   if (COMPILED && !goog.DEBUG) {
     opt_message = opt_message || "";
     throw Error("Importing test-only code into non-debug environment" + opt_message ? ": " + opt_message : ".");
   }
 };
+/**
+ * This method is a forward declaration of a variable, it doesn't initiate a value but tells the compiler about its existence.
+ * @param {string} name - The name of the variable to be declared.
+ */
+
 goog.forwardDeclare = function(name) {
 };
 if (!COMPILED) {
+  /**
+   * Determines if a given namespace (name) has been provided.
+   * @param {string}  name - The name of the namespace.
+   * @returns {boolean} True if the namespace has been provided and false otherwise.
+   */
   goog.isProvided_ = function(name) {
     return!goog.implicitNamespaces_[name] && goog.isDefAndNotNull(goog.getObjectByName(name));
   };
   goog.implicitNamespaces_ = {};
 }
+/**
+ * The method gets the value of a deeply nested object property, given the dot notation representation of the property's path and the object. 
+ * If the property doesn't exist, it returns null.
+ *
+ * @param {string}  name - The dot notation representation of the object property's path.
+ * @param {Object}  opt_obj - The object in which we are looking for the property.
+ * @returns {Object|null} The value of the property if it exists, null otherwise.
+ */
 goog.getObjectByName = function(name, opt_obj) {
   var parts = name.split(".");
   var cur = opt_obj || goog.global;
@@ -83,12 +132,25 @@ goog.getObjectByName = function(name, opt_obj) {
   }
   return cur;
 };
+/**
+ * This method assigns properties from the given object to the global scope object.
+ * @param {Object} obj - The Object with properties that should be globalized.
+ * @param {Object} opt_global - Optional, A reference to the global object.
+ */
 goog.globalize = function(obj, opt_global) {
   var global = opt_global || goog.global;
   for (var x in obj) {
     global[x] = obj[x];
   }
 };
+/**
+ * This method adds dependencies to the Google closure library.
+ * @param {string} relPath - The relative file path where the dependencies are located, with forward slashes.
+ * @param {Array} provides - The list of namespaces that the script provides.
+ * @param {Array} requires - The list of namespaces or classes that the script requires.
+ * @returns {undefined} No return value
+ */
+
 goog.addDependency = function(relPath, provides, requires) {
   if (goog.DEPENDENCIES_ENABLED) {
     var provide, require;
@@ -110,6 +172,14 @@ goog.addDependency = function(relPath, provides, requires) {
   }
 };
 goog.define("goog.ENABLE_DEBUG_LOADER", true);
+/**
+ * This method is used for importing a Google Closure library. It ensures that the library - represented by a unique namespace - is available for use within the current context.
+ * This will throw an error in case the library could not be found - applicable for non-compiled mode only. If a library is already imported, it will return without doing anything.
+ * In debug mode, it gets the path to the library from its dependencies and writes scripts to include the library into the current JS context.
+ * @param {string}  name - The unique namespace of the Closure library that needs to be imported.
+ * @throws {Error} Throws an error if the Closure library (namespace) to import could not be found.
+ * @returns {void} This function does not return a value.
+ */
 goog.require = function(name) {
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
@@ -134,15 +204,44 @@ goog.basePath = "";
 goog.global.CLOSURE_BASE_PATH;
 goog.global.CLOSURE_NO_DEPS;
 goog.global.CLOSURE_IMPORT_SCRIPT;
+/**
+ * This is a no-operation function which is intended to be a placeholder for 
+ * optional functions in a defined API. It is not expected to be invoked and it does not return any value.
+ */
 goog.nullFunction = function() {
 };
+/**
+ * It is a simple identity function that returns the first argument it receives.
+ * @param {any}  opt_returnValue - The value to be returned.
+ * @param {any}  var_args - optional arguments
+ * @returns {any} Returns whatever is passed as the first argument.
+ */
 goog.identityFunction = function(opt_returnValue, var_args) {
   return opt_returnValue;
 };
+/**
+ * This is an abstract method declaration which throws an error when not implemented.
+ * It's a placeholder for methods that need to be implemented in derived classes.
+ * @throws {Error} Throws an error when the method is not implemented
+ */
 goog.abstractMethod = function() {
   throw Error("unimplemented abstract method");
 };
+/**
+ * This method ensures a class to be Singleton by adding a getInstance method to its constructor.
+ * The getInstance method is used to obtain the singleton instance of the class.
+ * It checks if an instance already exists. If it does, this instance is returned. 
+ * If it doesn't, a new instance is created, stored, and then returned.
+ * If the code execution is in DEBUG mode, the constructor information is stored in instantiatedSingletons array.
+ * @param {function} ctor - The constructor of the class which needs to become Singleton.
+ */
 goog.addSingletonGetter = function(ctor) {
+  /**
+   * Singleton pattern implementation. This method is used to ensure a class has only one instance
+   * and provides a global point of access to it. It checks if an instance of the class already exists.
+   * If it exists, the instance is returned. Otherwise, a new instance is created and returned.
+   * @returns {Object} An instance of the constructor function 'ctor'.
+   */
   ctor.getInstance = function() {
     if (ctor.instance_) {
       return ctor.instance_;
@@ -158,10 +257,18 @@ goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
 if (goog.DEPENDENCIES_ENABLED) {
   goog.included_ = {};
   goog.dependencies_ = {pathToNames:{}, nameToPath:{}, requires:{}, visited:{}, written:{}};
+  /**
+   * Checks if the global document object is defined and if the "write" property exists in the document object.
+   * @returns {boolean} True if the global document object is defined and the "write" property exists in the document.
+   */
   goog.inHtmlDocument_ = function() {
     var doc = goog.global.document;
     return typeof doc != "undefined" && "write" in doc;
   };
+  /**
+   * Finds the base path of the google closure library by reviewing attached scripts.
+   * @returns {void} Sets the global variable 'goog.basePath' to the base path if found.
+   */
   goog.findBasePath_ = function() {
     if (goog.global.CLOSURE_BASE_PATH) {
       goog.basePath = goog.global.CLOSURE_BASE_PATH;
@@ -183,12 +290,23 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
     }
   };
+  /**
+   * Method to import scripts into the global context.
+   * @param {String} src - The URL source of the script to be imported.
+   * @returns {undefined} This function does not have a return statement; the result is a side effect (script gets imported).
+   */
   goog.importScript_ = function(src) {
     var importScript = goog.global.CLOSURE_IMPORT_SCRIPT || goog.writeScriptTag_;
     if (!goog.dependencies_.written[src] && importScript(src)) {
       goog.dependencies_.written[src] = true;
     }
   };
+  /**
+   * Writes a script tag with the provided source URL to the document.
+   * Throwing an error if script tag for 'deps.js' tries to be loaded after document load.
+   * @param {string} src - The source URL of the script to be written.
+   * @returns {boolean} Returns true if the script could be written successfully. Returns false if the function is not working in the context of an HTML document or the function tries to load 'deps.js' after document load.
+   */
   goog.writeScriptTag_ = function(src) {
     if (goog.inHtmlDocument_()) {
       var doc = goog.global.document;
@@ -206,10 +324,23 @@ if (goog.DEPENDENCIES_ENABLED) {
       return false;
     }
   };
+  /**
+   * Writes scripts in correct order by visiting dependencies among them. 
+   * Keeps track of scripts already seen/written and dependencies visited.
+   * If a dependency required isn't provided, it retrieves the correct path to it.
+   * If it fails to retrieve or a script input is undefined, it throws an error.
+   *
+   * @returns {undefined} Does not return anything.
+   */
   goog.writeScripts_ = function() {
     var scripts = [];
     var seenScript = {};
     var deps = goog.dependencies_;
+    /**
+     * Visits a given node, checks its existence in dependencies, handles circular dependencies, processes requirement dependencies, and handles undefined dependencies.
+     * @param {string}  path - The path of the node to visit.
+     * @throws {Error} Throws an error if the required dependency's name does not exist in dependencies nameToPath.
+     */
     function visitNode(path) {
       if (path in deps.written) {
         return;
@@ -251,6 +382,11 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
     }
   };
+  /**
+   * Retrieves the path from the dependencies using a specific rule.
+   * @param {string} rule - The rule to use to get the path from the dependencies.
+   * @returns {string|null} The path if the rule exists in the dependencies, otherwise returns null.
+   */
   goog.getPathFromDeps_ = function(rule) {
     if (rule in goog.dependencies_.nameToPath) {
       return goog.dependencies_.nameToPath[rule];
@@ -263,6 +399,11 @@ if (goog.DEPENDENCIES_ENABLED) {
     goog.importScript_(goog.basePath + "deps.js");
   }
 }
+/**
+ * Determines the effective type of a value.
+ * @param {any} value - The value for which to determine the type.
+ * @returns {string} A string indicating the effective type of the value. Possible return values include "object", "array", "function", "null", or the standard typeof return value.
+ */
 goog.typeOf = function(value) {
   var s = typeof value;
   if (s == "object") {
@@ -294,12 +435,27 @@ goog.typeOf = function(value) {
   }
   return s;
 };
+/**
+ * Checks if the provided value is null.
+ * @param {any}  val - The value to be checked.
+ * @returns {boolean} Returns true if the value is null, otherwise false.
+ */
 goog.isNull = function(val) {
   return val === null;
 };
+/**
+ * Check if a given value is defined and not null.
+ * @param {any} val - The value to be checked.
+ * @returns {boolean} Returns true if the value is defined and not null, false otherwise.
+ */
 goog.isDefAndNotNull = function(val) {
   return val != null;
 };
+/**
+ * Checks if the input value is an array.
+ * @param {any}  val - The value to check.
+ * @returns {boolean} True if value is an array, False otherwise.
+ */
 goog.isArray = function(val) {
   return goog.typeOf(val) == "array";
 };
