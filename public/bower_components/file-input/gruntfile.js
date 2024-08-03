@@ -6,8 +6,8 @@ function config(name) {
 module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
-        jshint: config("jshint"),
-        karma: config("karma")
+        jshint: require("./grunt_tasks/jshint.js"),
+        karma: require("./grunt_tasks/karma.js")
     });
 
     grunt.loadNpmTasks("grunt-contrib-jshint");
