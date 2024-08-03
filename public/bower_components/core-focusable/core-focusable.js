@@ -77,6 +77,9 @@ Polymer.CoreFocusable = {
     disabled: '_disabledChanged'
   },
 
+  /**
+   * Handles changes in the disabled state of the component. If the component is disabled it stops pointer events, removes tabindex, and set aria-disabled attribute. Conversely, if the component is enabled it allows pointer events, adds tabindex, and removes aria-disabled attribute.
+   */
   _disabledChanged: function() {
     if (this.disabled) {
       this.style.pointerEvents = 'none';
@@ -89,6 +92,10 @@ Polymer.CoreFocusable = {
     }
   },
 
+  /**
+   * Function to handle the downAction which alters the active and pressed states. When invoked, sets the status of 'pressed' as true. If 'toggle' is true, it inverts the status of 'active'; otherwise, sets 'active' as true.
+   */
+  
   _downAction: function() {
     this.pressed = true;
 
@@ -111,6 +118,11 @@ Polymer.CoreFocusable = {
     this._focusAction();
   },
 
+  /**
+   * Method to handle the up action. It is used to manage the state of a potentially toggleable button or input. 
+   * If the toggle property of the button or input is false, it turns off its active state upon triggering up action.
+   * @returns {void} This method does not return anything.
+   */
   _upAction: function() {
     this.pressed = false;
 
@@ -119,6 +131,11 @@ Polymer.CoreFocusable = {
     }
   },
 
+  /**
+   * Represents a method that sets the 'focused' state of the element to true only when the element is not in a 'pressed' state. 
+   * Primarily used for keyboard-based navigation.
+   * @returns {void} This method does not have a return value.
+   */
   _focusAction: function() {
     if (!this.pressed) {
       // Only render the "focused" state if the element gains focus due to
@@ -127,6 +144,10 @@ Polymer.CoreFocusable = {
     }
   },
 
+  /**
+   * This method is responsible for managing the blur action within the application. Upon calling it, it alters the application focus state.
+   * @returns {void} No directly observable return value. The focused state of the application is internally altered to false. 
+   */
   _blurAction: function() {
     this.focused = false;
   }

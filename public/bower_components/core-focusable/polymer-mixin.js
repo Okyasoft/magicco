@@ -1,3 +1,9 @@
+/**
+ * This method is for handling the mixture of prototypes. It adds properties from a mixin to a prototype, including publish, eventDelegates, and observe properties.
+ * @param {Object} prototype - The prototype object that is being extended.
+ * @param {Object} mixin - The mixin object that contains properties to add to the prototype.
+ * @returns {Object} Returns the updated prototype object.
+ */
 Polymer.mixin2 = function(prototype, mixin) {
 
   // adds a single mixin to prototype
