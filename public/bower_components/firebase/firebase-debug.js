@@ -549,14 +549,14 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ? (goog.global["JSON"]["parse"]) : f
   var o = String(s);
   if (goog.json.isValid_(o)) {
     try {
-      return(eval("(" + o + ")"));
+      return JSON.parse(o);
     } catch (ex) {
     }
   }
   throw Error("Invalid JSON string: " + o);
 };
 goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ? (goog.global["JSON"]["parse"]) : function(s) {
-  return(eval("(" + s + ")"));
+  return JSON.parse(s);
 };
 goog.json.Replacer;
 goog.json.Reviver;
@@ -716,7 +716,7 @@ goog.scope(function() {
     if (storedVal == null) {
       return null;
     } else {
-      return fb.util.json.eval(storedVal);
+      return fb.util.json.parse(storedVal);
     }
   };
   DOMStorageWrapper.prototype.remove = function(key) {
@@ -1362,7 +1362,7 @@ goog.string.remove = function(s, ss) {
 };
 goog.string.removeAll = function(s, ss) {
   var re = new RegExp(goog.string.regExpEscape(ss), "g");
-  return s.replace(re, "");
+  return s.replace(/<RegExp goes here>/g, "");
 };
 goog.string.regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").replace(/\x08/g, "\\x08");
@@ -1458,7 +1458,7 @@ goog.string.toSelectorCase = function(str) {
 goog.string.toTitleCase = function(str, opt_delimiters) {
   var delimiters = goog.isString(opt_delimiters) ? goog.string.regExpEscape(opt_delimiters) : "\\s";
   delimiters = delimiters ? "|[" + delimiters + "]+" : "";
-  var regexp = new RegExp("(^" + delimiters + ")([a-z])", "g");
+  var regexp = new RegExp("(^|[\s]+)([a-z])", "g");
   return str.replace(regexp, function(all, p1, p2) {
     return p1 + p2.toUpperCase();
   });
@@ -6119,7 +6119,7 @@ goog.provide("fb.core.util.NodePatches");
       }
       function decodeChunk(state, chunk, encoding) {
         if (!state["objectMode"] && state["decodeStrings"] !== false && typeof chunk === "string") {
-          chunk = new Buffer(chunk, encoding);
+          chunk = Buffer.from(chunk, encoding);
         }
         return chunk;
       }
